@@ -31,6 +31,7 @@ namespace ftb_backup
                 _logger.Log("Error detected, archive deleted");
                 _logger.Log(ex);
             }
+            Console.Read();
         }
 
         private FileData archiveDirectory(string directory)
