@@ -8,10 +8,12 @@ namespace ftb_backup.Utils
     {
         private StringBuilder _builder;
         private string _filePath;
+        private string _logDirectory;
 
         public Logger()
         {
-            _filePath = Directory.GetCurrentDirectory() + $"\\log_{getTimestamp()}.txt";
+            _logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+            _filePath = Path.Combine(_logDirectory, $"log_{getTimestamp()}.txt");
             _builder = new StringBuilder();
         }
 
@@ -34,6 +36,11 @@ namespace ftb_backup.Utils
             Log("=======================================");
             Log($"A log file was written to {_filePath}");
             Log("=======================================");
+
+            if (!Directory.Exists(_logDirectory))
+            {
+                Directory.CreateDirectory(_logDirectory);
+            }
             File.WriteAllText(_filePath, _builder.ToString());
         }
 

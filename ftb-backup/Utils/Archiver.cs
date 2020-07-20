@@ -14,16 +14,33 @@ namespace ftb_backup.Utils
             SevenZipBase.SetLibraryPath(@"C:\Program Files\7-Zip\7z.dll");
         }
 
-        public void CompressFolder(string folderPath, string archiveName)
+        public string CompressDirectory(string folderPath, string archiveName)
         {
             SevenZipCompressor compressor = new SevenZipCompressor
             {
                 ArchiveFormat = OutArchiveFormat.Zip,
-                PreserveDirectoryRoot = true
+                PreserveDirectoryRoot = true,
+                TempFolderPath = folderPath
             };
+
             _logger.Log($"Compressing {folderPath}");
-            compressor.CompressDirectory(folderPath, archiveName);
-            _logger.Log(string.Format($"Created archive {archiveName}"));
+
+            string cleanedArchiveName = $"{cleanArchiveName(archiveName)}.zip";
+            compressor.CompressDirectory(folderPath, cleanedArchiveName);
+
+            _logger.Log(string.Format($"Created archive {cleanedArchiveName}"));
+            return Path.Combine(Environment.CurrentDirectory, cleanedArchiveName);
+        }
+
+        private string cleanArchiveName(string archiveName)
+        {
+            string cleanedName = archiveName.Trim();
+            int extensionIndex = cleanedName.IndexOf(".");
+            if (extensionIndex != -1)
+            {
+                cleanedName = cleanedName.Substring(0, cleanedName.Length - extensionIndex - 1);
+            }
+            return cleanedName.Replace(":", "-").Replace("/", "-").Replace(" ", "-").Replace("\\", "-");
         }
 
         public bool ExtractArchive(string filePath, string extractDirectory)
