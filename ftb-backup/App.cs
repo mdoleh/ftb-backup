@@ -35,7 +35,7 @@ namespace ftb_backup
 
         private FileData archiveDirectory(string directory)
         {
-            string archiveName = DateTime.Now.ToString();
+            string archiveName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
             return _archiver.CompressDirectory(directory, archiveName);
         }
 
