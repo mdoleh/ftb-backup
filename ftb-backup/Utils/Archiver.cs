@@ -14,7 +14,7 @@ namespace ftb_backup.Utils
             SevenZipBase.SetLibraryPath(@"C:\Program Files\7-Zip\7z.dll");
         }
 
-        public string CompressDirectory(string folderPath, string archiveName)
+        public FileData CompressDirectory(string folderPath, string archiveName)
         {
             SevenZipCompressor compressor = new SevenZipCompressor
             {
@@ -29,7 +29,11 @@ namespace ftb_backup.Utils
             compressor.CompressDirectory(folderPath, cleanedArchiveName);
 
             _logger.Log(string.Format($"Created archive {cleanedArchiveName}"));
-            return Path.Combine(Environment.CurrentDirectory, cleanedArchiveName);
+            return new FileData
+            {
+                filePath = Path.Combine(Directory.GetCurrentDirectory(), cleanedArchiveName),
+                fileName = cleanedArchiveName
+            };
         }
 
         private string cleanArchiveName(string archiveName)

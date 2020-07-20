@@ -1,10 +1,18 @@
-﻿namespace ftb_backup
+﻿using ftb_backup.Parsers;
+using ftb_backup.Utils;
+
+namespace ftb_backup
 {
     class MainApp
     {
         static void Main(string[] args)
         {
-            new App().Run();
+            ILogger logger = new Logger();
+            new App(
+                new Archiver(logger),
+                logger,
+                new JSONParser<Config>()
+            ).Run();
         }
     }
 }
